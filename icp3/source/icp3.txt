@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html ng-app="foods" ng-controller="foodctrl">
+<head>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script>
+        angular.module('foods', [])
+            .controller('foodctrl', function($scope, $http) {
+                $("#speech").hide();
+                $scope.getvalues = function() {
+                    $http.get('https://api.edamam.com/api/nutrition-data?app_id=fe96f173&app_key=9f92caf9f4ebaa2e02b120a8304afbfa&ingr='+$scope.Item+'.json').success(function(data)
+                    {
+                        console.log(data);
+                        $scope.Calories = "Calories : " + data.calories ;
+                        $scope.TotalWeight = "Total Weight : " + data.totalWeight;
+                        var url = "http://stream.watsonplatform.net/text-to-speech/api/v1/synthesize?username=247712b8-c751-4174-8c44-52eaa8e9e82b&password=ERoNDIURwRrI&text="+$scope.Item +$scope.Calories;
+                        $("#speech").attr('onclick',"location.href="+"'"+url+"'");
+                        $("#speech").show();
+                    })
+                }
+            });
+    </script>
+    <style>
+
+        body  {
+            background-image: url("https://thumbs.dreamstime.com/z/italian-food-background-tomatoes-basil-spaghetti-mozzarella-balls-asparagus-vintage-white-wooden-table-copy-space-54500015.jpg");
+            background-color: aliceblue;
+        }
+
+
+
+    </style>
+</head>
+<body>
+<h1 align="center" style="font-size:45px; color:darkblue; font-family:'Lucida Handwriting' ">Food Details</h1>
+<div align = "center">
+   <p>Enter the food item for details</font>  </p>
+    <input type="text" ng-model="Item" placeholder="Enter food item" >
+
+    <button  id="btn" ng-click="getvalues()">Get Details</button>
+
+        <p  class="Calories" ng-bind="Calories" style="color:mediumvioletred" ></p>
+        <p class="TotalWeight" ng-bind="TotalWeight" style="color:#ac2925"></p>
+
+    <input type="button" style="display: none" id="speech" value="speech"></input>
+</div>
+</div>
+</body>
+</html>
