@@ -1,0 +1,35 @@
+/**
+ * Created by mnpw3d on 20/10/2016.
+ */
+var MongoClient = require('mongodb').MongoClient;
+var assert = require('assert');
+var url = 'mongodb://sravya:sravya@ds117509.mlab.com:17509/sravya_db';
+//var url = 'mongodb://marmik:2621@ds051923.mlab.com:51923/demo';
+var insertDocument = function(db, callback) {
+    db.collection('demoase').insertOne( {
+        "fname" : "Sravya",
+        "lname" : "Para",
+        "address":{
+            "city":"Kansas City",
+            "state":"MO"
+        },
+        "education" : {
+            "university":"UMKC",
+            "degree":"Master of Science",
+            "major":"Computer Science"
+        },
+        mobile : 123456,
+        "mail":"sravya@mail.umkc.edu"
+    }, function(err, result) {
+        assert.equal(err, null);
+        console.log("Inserted a document into the asedemo collection.");
+        callback();
+    });
+};
+MongoClient.connect(url, function(err, db) {
+    var dbo = db.db("sravya_db")
+    assert.equal(null, err);
+    insertDocument(dbo, function() {
+        db.close();
+    });
+});

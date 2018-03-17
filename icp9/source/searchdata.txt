@@ -1,0 +1,71 @@
+/*
+ * Created by mnpw3d on 20/10/2016.
+ */
+var MongoClient = require('mongodb').MongoClient;
+var assert = require('assert');
+var url = 'mongodb://sravya:sravya@ds117509.mlab.com:17509/sravya_db';
+var findUser = function(db, callback) {
+    var cursor =db.collection('demoase').find( );
+    cursor.each(function(err, doc) {
+        assert.equal(err, null);
+        if (doc != null) {
+            console.log(doc);
+        } else {
+            callback();
+        }
+    });
+};
+var findUserwithName = function(db,callback) {
+    var cursor = db.collection('demoase').find({"fname":"sravya"});
+    cursor.each(function(err,doc) {
+        assert.equal(err,null);
+        if(doc != null)
+        {
+            console.log("First Name:" + doc.fname);
+            console.log("Last Name:" + doc.lname);
+            console.log("city:" + doc.address.city);
+        }
+    });
+}
+var findUserwithUniversity = function(db, callback) {
+    debugger;
+    var cursor = db.collection('demoase').find({"education.university":"UMKC"});
+    cursor.each(function(err,doc){
+        assert.equal(err,null);
+        if(doc != null)
+        {
+            console.log("First Name:" + doc.fname);
+            console.log("University:" + doc.education.university);
+            console.log("Degree:" + doc.education.degree);
+            console.log("Major:" + doc.education.major);
+            console.log("mail:" + doc.mail);
+            console.log("mobile:" +doc.mobile);
+        }
+    });
+}
+
+var findUserwithmobile = function(db, callback){
+    var cursor = db.collection('demoase').find({"mobile":"123456"});
+    cursor.each(function(err,doc)
+    {
+        assert.equal(err,null);
+        if(doc != null)
+        {
+            console.log("First Name:" + doc.fname);
+            console.log("University:" + doc.education.university);
+            console.log("Degree:" + doc.education.degree);
+            console.log("Major:" + doc.education.major);
+            console.log("mail:" + doc.mail);
+            console.log("mobile:" +doc.mobile);
+        }
+    });
+
+}
+
+MongoClient.connect(url, function(err, db) {
+    assert.equal(null, err);
+    var dbo  = db.db("sravya_db")
+    findUserwithUniversity(dbo, function() {
+        db.close();
+    });
+});
